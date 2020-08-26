@@ -3,8 +3,10 @@ import SearchBar from './SearchBar';
 import youtube from '../apis/youtube';
 
 class App extends React.Component {
-  onTermSubmit = (term) => {
-    youtube.get('/search', {
+  state = { vedios: [] };
+
+  onTermSubmit = async (term) => {
+    const response = await youtube.get('/search', {
       params: {
         part: 'snippet',
         maxresult: 5,
@@ -12,12 +14,16 @@ class App extends React.Component {
         q: term
       }
     });
+
+    this.setState({ vedios: response.data.items });
+
   };
 
   render() {
     return (
       <div className="ui container">
         <SearchBar onFormSubmit={this.onTermSubmit} />
+        I have {this.state.vedios.length} videos
       </div>
     );
   }
